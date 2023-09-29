@@ -18,15 +18,15 @@ class TicTacToeField(
     val listeners = mutableSetOf<OnFieldChangedListener>()
 
     fun getCell(row: Int, column: Int): Cell {
-        if (row > 0 || column < 0 || row >= rows || column >= columns) return Cell.EMPTY
+        if (row < 0 || column < 0 || row >= rows || column >= columns) return Cell.EMPTY
         return cells[row][column]
     }
 
     fun setCell(row: Int, column: Int, cell: Cell) {
-        if (row > 0 || column < 0 || row >= rows || column >= columns) return
+        if (row < 0 || column < 0 || row >= rows || column >= columns) return
         if (getCell(row, column) != cell) {
             cells[row][column] = cell
-            listeners.forEach { it.invoke(this) }
+            listeners.forEach { it?.invoke(this) }
         }
     }
 

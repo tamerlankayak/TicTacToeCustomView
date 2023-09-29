@@ -37,6 +37,8 @@ class TicTacToeView(
     private var cellSize: Float = 0f
     private var cellPadding: Float = 0f
 
+    private val cellRect = RectF()
+
     private lateinit var player1Paint: Paint
     private lateinit var player2Paint: Paint
     private lateinit var gridPaint: Paint
@@ -65,6 +67,8 @@ class TicTacToeView(
         initPaints()
         if (isInEditMode) {
             ticTacToeField = TicTacToeField(8, 6)
+            ticTacToeField?.setCell(4, 2, Cell.PLAYER_1)
+            ticTacToeField?.setCell(4, 3, Cell.PLAYER_2)
         }
     }
 
@@ -155,14 +159,48 @@ class TicTacToeView(
         val yStart = fieldRect.top
         val yEnd = fieldRect.bottom
 
-        for (i in 0..field.rows) {
+        for (i in 0..field.columns) {
             val x = fieldRect.left + cellSize * i
             canvas.drawLine(x, yStart, x, yEnd, gridPaint)
         }
     }
 
     private fun drawCells(canvas: Canvas) {
+        val field = this.ticTacToeField ?: return
+        for (row in 0 until field.rows) {
+            for (column in 0 until field.columns) {
+                val cell = field.getCell(row, column)
+                if (cell == Cell.PLAYER_1) {
+                    drawPlayer1(canvas, row, column)
+                } else if (cell == Cell.PLAYER_2) {
+                    drawPlayer2(canvas, row, column)
+                }
+            }
+        }
+    }
 
+    private fun drawPlayer1(canvas: Canvas, row: Int, column: Int) {
+        val cellRect = getCellRect(row, column)
+        canvas.drawLine(cellRect.left, cellRect.top, cellRect.right, cellRect.bottom, player1Paint)
+        canvas.drawLine(cellRect.right, cellRect.top, cellRect.left, cellRect.bottom, player1Paint)
+    }
+
+    private fun drawPlayer2(canvas: Canvas, row: Int, column: Int) {
+        val cellRect = getCellRect(row, column)
+        canvas.drawCircle(
+            cellRect.centerX(),
+            cellRect.centerY(),
+            cellRect.width() / 2,
+            player2Paint
+        )
+    }
+
+    private fun getCellRect(row: Int, column: Int): RectF {
+        cellRect.left = fieldRect.left + column * cellSize + cellPadding
+        cellRect.top = fieldRect.top + row * cellSize + cellPadding
+        cellRect.right = cellRect.left + cellSize - cellPadding * 2
+        cellRect.bottom = cellRect.top + cellSize - cellPadding * 2
+        return cellRect
     }
 
     private fun updateViewSizes() {
