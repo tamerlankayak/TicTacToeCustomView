@@ -4,7 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
-        <item name="tocTacToeFieldStyle">@style/GlobalTicTacToeFieldStyle</item>
+        <item name="tocTacToeFieldStyle">@style/Base.Theme.AndroidCustomView</item>
     </style>
 
     <style name="Theme.AndroidCustomView" parent="Base.Theme.AndroidCustomView" />
